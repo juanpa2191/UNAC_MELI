@@ -1,45 +1,71 @@
 import type { Product } from "../types/Products";
-import productsData from "../data/products.json";
 
- let products: Product[] = [...productsData];
+const API_BASE_URL = 'http://localhost:3000/api';
 
- export const getProducts = (): Product[] => {
-    return products;
-    };
-
-export const getProductById = (id: number): Product | undefined => {
-    return products.find(product => product.id === id);
-}
-
-export const createProduct = (product: Omit<Product, 'id'>): Product => {
-    const newProduct: Product = {
-        ...product,
-        id: Math.max(...products.map(p => p.id)) + 1,
-    };
-    products.push(newProduct);
-    return newProduct;
+export const getProducts = async (): Promise<Product[]> => {
+    const response = await fetch(`${API_BASE_URL}/products`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch products');
+    }
+    return response.json();
 };
 
-export const updateProduct = (id: number, updatedProduct: Partial<Product>): Product | null => {
-    const index = products.findIndex(product => product.id === id);
-    if (index === -1) return null;
-    products[index] = {...products[index], ...updatedProduct};
-    return products[index];
+export const getProductById = async (id: number): Promise<Product | undefined> => {
+    const response = await fetch(`${API_BASE_URL}/products/${id}`);
+    if (!response.ok) {
+        if (response.status === 404) return undefined;
+        throw new Error('Failed to fetch product');
+    }
+    return response.json();
 };
 
-export const deleteProduct = (id: number): boolean => {
-    const index = products.findIndex(product => product.id === id);
-    if (index === -1) return false;
-    products.splice(index, 1);
+export const createProduct = async (product: Omit<Product, 'id'>): Promise<Product> => {
+    const response = await fetch(`${API_BASE_URL}/products`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(product),
+    });
+    if (!response.ok) {
+        throw new Error('Failed to create product');
+    }
+    return response.json();
+};
+
+export const updateProduct = async (id: number, updatedProduct: Partial<Omit<Product, 'id'>>): Promise<Product | null> => {
+    const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProduct),
+    });
+    if (!response.ok) {
+        if (response.status === 404) return null;
+        throw new Error('Failed to update product');
+    }
+    return response.json();
+};
+
+export const deleteProduct = async (id: number): Promise<boolean> => {
+    const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+        method: 'DELETE',
+    });
+    if (!response.ok) {
+        if (response.status === 404) return false;
+        throw new Error('Failed to delete product');
+    }
     return true;
 };
 
-export const searchProducts = (query: string): Product[] => {
-    return products.filter(product => 
+export const searchProducts = async (query: string): Promise<Product[]> => {
+    const products = await getProducts();
+    return products.filter(product =>
         product.name.toLowerCase().includes(query.toLowerCase()) ||
         product.description.toLowerCase().includes(query.toLowerCase()) ||
         product.category.toLowerCase().includes(query.toLowerCase()) ||
         product.price.toString().includes(query) ||
-        (product.price >= parseFloat(query) && product.price <= parseFloat(query)) 
+        (product.price >= parseFloat(query) && product.price <= parseFloat(query))
     );
 };

@@ -18,10 +18,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onSave, onCancel }) 
         description: product?.description || '',
         price: product?.price.toString() || '',
         category: product?.category || '',
+        stock: product?.stock.toString() || '0',
         image: product?.image || ''
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const productData = {
@@ -29,15 +30,20 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onSave, onCancel }) 
             description: formData.description,
             price: parseFloat(formData.price),
             category: formData.category,
+            stock: parseInt(formData.stock) || 0,
             image: formData.image || undefined
         };
 
-        if (product) {
-            updateProduct(product.id, productData);
-        }else {
-            createProduct(productData);
+        try {
+            if (product) {
+                await updateProduct(product.id, productData);
+            } else {
+                await createProduct(productData);
+            }
+            onSave();
+        } catch (error) {
+            console.error('Error saving product:', error);
         }
-        onSave();
     };
     const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [field]: e.target.value });
@@ -99,6 +105,20 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onSave, onCancel }) 
                         onChange={handleChange('category')}
                         required
                         placeholder="Categoria del producto"
+                    />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Stock:
+                    </label>
+                    <Input
+                        type="number"
+                        value={formData.stock}
+                        onChange={handleChange('stock')}
+                        required
+                        placeholder="0"
+                        min="0"
                     />
                 </div>
 
