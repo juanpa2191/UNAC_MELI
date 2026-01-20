@@ -12,9 +12,9 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete}) => {
   return (
     <div className="border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-        {product.image && (
+        {product.imageUrl && (
           <img
-            src={product.image}
+            src={product.imageUrl}
             alt={product.name}
             className="w-full h-48 object-cover mb-4 rounded"
           />

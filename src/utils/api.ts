@@ -1,6 +1,6 @@
 import type { Product } from "../types/Products";
 
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'https://unacmelibacknode-production-7517.up.railway.app/api';
 
 export const getProducts = async (): Promise<Product[]> => {
     const response = await fetch(`${API_BASE_URL}/products`);
@@ -20,6 +20,7 @@ export const getProductById = async (id: number): Promise<Product | undefined> =
 };
 
 export const createProduct = async (product: Omit<Product, 'id'>): Promise<Product> => {
+    console.log('Creating product:', JSON.stringify(product));
     const response = await fetch(`${API_BASE_URL}/products`, {
         method: 'POST',
         headers: {
@@ -34,6 +35,7 @@ export const createProduct = async (product: Omit<Product, 'id'>): Promise<Produ
 };
 
 export const updateProduct = async (id: number, updatedProduct: Partial<Omit<Product, 'id'>>): Promise<Product | null> => {
+    console.log('Creating product:', JSON.stringify(updatedProduct));
     const response = await fetch(`${API_BASE_URL}/products/${id}`, {
         method: 'PUT',
         headers: {
