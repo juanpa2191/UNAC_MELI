@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { Product } from "../types/Products";
 import { getProducts, deleteProduct } from "../utils/api";
 import ProductCard from "./ProductCard";
-import Input from "./Input.tsx";
+import Input from "./input";
 
 interface ProductListProps {
   onEdit: (product: Product) => void;
