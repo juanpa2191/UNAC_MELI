@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { Product } from "../types/Products";
 import { getProducts, deleteProduct } from "../utils/api";
 import ProductCard from "./ProductCard";
-import Input from "./Input";
+import Input from "./Input.tsx";
 
 interface ProductListProps {
   onEdit: (product: Product) => void;
@@ -49,7 +49,7 @@ const ProductList: React.FC<ProductListProps> = ({ onEdit }) => {
           type="text"
           placeholder="Buscar productos..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
           className="w-full max-w-md mx-auto block"
         />
       </div>

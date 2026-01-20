@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Product } from "../types/Products";
 import { createProduct, updateProduct } from "../utils/api";
-import Input from "./Input";
+import Input from "./Input.tsx";
 import Textarea from "./Textarea";
 import Button from "./Button";
 
