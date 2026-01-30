@@ -1,6 +1,6 @@
 import type { Product } from "../types/Products";
 
-const API_BASE_URL = 'https://unacmelibacknode-production-7517.up.railway.app/api';
+const API_BASE_URL = 'http://18.117.158.167:3000/api';
 
 export const getProducts = async (): Promise<Product[]> => {
     const response = await fetch(`${API_BASE_URL}/products`);
