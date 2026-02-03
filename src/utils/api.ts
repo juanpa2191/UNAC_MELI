@@ -1,6 +1,6 @@
 import type { Product } from "../types/Products";
 
-const API_BASE_URL = 'http://unac-meli.duckdns.org/api';
+const API_BASE_URL = 'http://13.58.187.123:3000/api';
 
 export const getProducts = async (): Promise<Product[]> => {
     const response = await fetch(`${API_BASE_URL}/products`);
